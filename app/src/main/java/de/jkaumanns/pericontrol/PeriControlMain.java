@@ -14,6 +14,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import de.jkaumanns.pericontrol.view.component.LockableViewPager;
+import de.jkaumanns.pericontrol.view.fragments.ManualTabFragment;
 
 public class PeriControlMain extends AppCompatActivity {
 
@@ -45,7 +46,7 @@ public class PeriControlMain extends AppCompatActivity {
 
     private void setupViewPager(final ViewPager viewPager) {
         ViewPagerAdapter adapter = new ViewPagerAdapter(getSupportFragmentManager());
-        //adapter.addFragment(new ManualTabFragment(), "Manual Mode");
+        adapter.addFragment(new ManualTabFragment(), "Manual Mode");
 //        adapter.addFragment(new ShowTabFragment(), "Show Mode");
 //        showTab = new CreateShowTabFragment();
 //        adapter.addFragment(showTab, "Create Show");
