@@ -30,7 +30,7 @@ public class DeviceArrayAdapter extends ArrayAdapter<Device> {
     public View getView(int position, View convertView, ViewGroup parent) {
         LayoutInflater inflater = (LayoutInflater) context
                 .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        View rowView = inflater.inflate(R.layout.device_row_layout, parent, false);
+        View rowView = inflater.inflate(R.layout.row_layout_device, parent, false);
         TextView txtDeviceId = (TextView) rowView.findViewById(R.id.txtDeviceId);
         TextView txtDeviceName = (TextView) rowView.findViewById(R.id.txtDeviceName);
         TextView txtDeviceChannels = (TextView) rowView.findViewById(R.id.txtDeviceChannelCount);
@@ -39,7 +39,7 @@ public class DeviceArrayAdapter extends ArrayAdapter<Device> {
         txtDeviceId.setText(s);
         s = values.get(position).getDeviceName();
         txtDeviceName.setText(s);
-        s = Byte.toString(values.get(position).getDeviceChannelCount());
+        s = Byte.toString(values.get(position).getDevicePortCount());
         txtDeviceChannels.setText(s);
         switch (values.get(position).getMode()) {
             case (byte) 0x0A:

@@ -4,33 +4,58 @@
     android:layout_height="match_parent"
     android:orientation="vertical">
 
-    <LinearLayout
-        android:id="@+id/settings"
+    <RelativeLayout
+        android:id="@+id/header"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal">
-
-        <TextView
-            android:id="@+id/txtMode"
-            android:layout_width="150dp"
-            android:layout_height="30dp"
-            android:layout_marginLeft="15dp"
-            android:layout_marginTop="10dp"
-            android:text="Mode" />
+        android:layout_height="60dp">
 
         <Button
-            android:layout_width="150dp"
+            android:id="@+id/btnGetDevices"
+            android:layout_width="160dp"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="10dp"
-            android:layout_marginLeft="15dp"
-            android:layout_marginTop="10dp"
-            android:text="Do Something" />
-    </LinearLayout>
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="40dp"
+            android:layout_marginRight="15dp"
+            android:background="@drawable/border_rounded"
+            android:text="@string/btnDiscoverLabel" />
+
+        <RadioGroup
+            android:id="@+id/rbtnGroup"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:layout_marginRight="40dp"
+            android:orientation="horizontal">
+
+            <RadioButton
+                android:id="@+id/rbtnIdle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="8dp"
+                android:text="Idle" />
+
+            <RadioButton
+                android:id="@+id/rbtnTest"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="8dp"
+                android:text="Test" />
+
+            <RadioButton
+                android:id="@+id/rbtnArmed"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="8dp"
+                android:text="Armed" />
+
+        </RadioGroup>
+    </RelativeLayout>
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_below="@id/settings"
+        android:layout_below="@id/header"
         android:background="#8a9bff"
         android:orientation="horizontal">
 
@@ -41,16 +66,6 @@
             android:background="#8affff"
             android:orientation="vertical">
 
-            <Button
-                android:id="@+id/btnGetDevices"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="5dp"
-                android:layout_marginLeft="15dp"
-                android:layout_marginRight="15dp"
-                android:layout_marginTop="5dp"
-                android:background="@drawable/border_rounded"
-                android:text="@string/btnDiscoverLabel"></Button>
 
             <ListView
                 android:id="@+id/lstDevices"

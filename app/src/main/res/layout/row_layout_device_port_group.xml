@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:custom="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal">
+
+    <de.jkaumanns.pericontrol.view.component.DevicePortButtonView
+        android:id="@+id/btnChannelRowX1"
+        android:layout_width="0dp"
+        android:layout_height="80dp"
+        android:layout_marginLeft="5dp"
+        android:layout_marginRight="5dp"
+        android:layout_marginTop="10dp"
+        android:layout_weight="1"
+        android:clickable="true"
+        android:focusable="true"
+        custom:channelNo="1"
+        custom:power="5 A"
+        custom:resistance="10 \u2126" />
+
+    <de.jkaumanns.pericontrol.view.component.DevicePortButtonView
+        android:id="@+id/btnChannelRowX2"
+        android:layout_width="0dp"
+        android:layout_height="80dp"
+        android:layout_marginLeft="5dp"
+        android:layout_marginRight="5dp"
+        android:layout_marginTop="10dp"
+        android:layout_weight="1"
+        custom:channelNo="2"
+        custom:power="5 A"
+        custom:resistance="10 \u2126" />
+
+    <de.jkaumanns.pericontrol.view.component.DevicePortButtonView
+        android:id="@+id/btnChannelRowX3"
+        android:layout_width="0dp"
+        android:layout_height="80dp"
+        android:layout_marginLeft="5dp"
+        android:layout_marginRight="5dp"
+        android:layout_marginTop="10dp"
+        android:layout_weight="1"
+        custom:channelNo="3"
+        custom:power="5 A"
+        custom:resistance="10 \u2126" />
+
+    <de.jkaumanns.pericontrol.view.component.DevicePortButtonView
+        android:id="@+id/btnChannelRowX4"
+        android:layout_width="0dp"
+        android:layout_height="80dp"
+        android:layout_marginLeft="5dp"
+        android:layout_marginRight="5dp"
+        android:layout_marginTop="10dp"
+        android:layout_weight="1"
+        custom:channelNo="4"
+        custom:power="5 A"
+        custom:resistance="10 \u2126" />
+
+    <de.jkaumanns.pericontrol.view.component.DevicePortButtonView
+        android:id="@+id/btnChannelRowX5"
+        android:layout_width="0dp"
+        android:layout_height="80dp"
+        android:layout_marginLeft="5dp"
+        android:layout_marginRight="5dp"
+        android:layout_marginTop="10dp"
+        android:layout_weight="1"
+        custom:channelNo="5"
+        custom:power="5 A"
+        custom:resistance="10 \u2126" />
+</LinearLayout>

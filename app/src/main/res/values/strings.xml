@@ -1,4 +1,5 @@
 <resources>
     <string name="app_name">PeriControl</string>
     <string name="btnDiscoverLabel">Discover</string>
+    <integer name="tagIdDevicePort">0</integer>
 </resources>
