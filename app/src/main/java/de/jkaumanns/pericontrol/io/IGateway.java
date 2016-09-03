@@ -1,5 +1,7 @@
 package de.jkaumanns.pericontrol.io;
 
+import java.util.ArrayList;
+
 /**
  * Created by Joerg on 01.09.2016.
  */
@@ -14,7 +16,7 @@ public interface IGateway {
     int writeMessage(IPeriProtocollMessage message);
 
     /**
-     * Immediately returns the message belonging to the message id.
+     * Waits for the message belonging to the message id till the timeout of 2 seconds has reached.
      *
      * @param messageId the message from Gateway belonging to the message id.
      * @return Either null if message was not retrieved from Gateway or the response message.
@@ -38,5 +40,12 @@ public interface IGateway {
      * @param timeoutMills
      * @return
      */
-    IPeriProtocollMessage retrieveMessage(int messageId, int maxMessageCount, int timeoutMills);
+    ArrayList<IPeriProtocollMessage> retrieveMessage(int messageId, int maxMessageCount, int timeoutMills);
+
+    /**
+     * removes the messageId from the list.
+     *
+     * @param messageId
+     */
+    void clean(int messageId);
 }

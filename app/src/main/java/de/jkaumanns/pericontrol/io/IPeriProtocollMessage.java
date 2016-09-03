@@ -7,11 +7,9 @@ public interface IPeriProtocollMessage {
 
     static final byte BROADCAST_MESSAGE = (byte) 0xFF;
 
-    void setDeviceId(byte deviceId);
-
     void setCommand(byte command);
 
-    void setMessageId(byte messageId);
+    void setMessageId(int messageId);
 
     void addParameter(byte param);
 
@@ -22,4 +20,20 @@ public interface IPeriProtocollMessage {
     void addParameter(float param);
 
     byte[] getMessage();
+
+    void setRawResponse(byte[] rawResponse);
+
+    int getRssi();
+
+    String getUid();
+
+    String getName();
+
+    byte getDeviceId();
+
+    void setDeviceId(byte deviceId);
+
+    byte getPortCount();
+
+    int getPortTimeout();
 }

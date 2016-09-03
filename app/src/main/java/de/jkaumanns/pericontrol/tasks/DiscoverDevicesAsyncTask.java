@@ -108,9 +108,21 @@ public class DiscoverDevicesAsyncTask extends AsyncTask<Void, Object, Void> {
 
     @Override
     protected Void doInBackground(Void... params) {
-        IGateway gateway = GatewayFactory.getGatewayInstance();
+        IGateway gateway = GatewayFactory.getGatewayInstance(weakActivity.get());
         IPeriProtocollMessage sendMessage = PeriProtocollMessageFactory.createDiscoverDevicesMessage();
         int messageId = gateway.writeMessage(sendMessage);
+        long startMillis = System.currentTimeMillis();
+        while (System.currentTimeMillis() <= startMillis + 10000) {
+            IPeriProtocollMessage msg = gateway.retrieveMessage(messageId);
+            Device device = new Device();
+            device.setDeviceUid(msg.getUid());
+            device.setName(msg.getName());
+            device.setDeviceId(msg.getDeviceId());
+            device.setRssi(msg.getRssi());
+            device.setDevicePortCount(msg.getPortCount());
+            publishProgress(device.getDeviceId(), device);
+        }
+        gateway.clean(messageId);
 //            MessageHandler handler = MessageHandler.newInstance();
 //            for(int i=2; i<range; i++) {
 //                Device device = null;

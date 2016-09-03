@@ -23,9 +23,15 @@ public class Device implements Serializable {
     private String name;
     private ArrayList<DevicePortGroup> portGroups;
     private DevicePortsFragment fragment;
-    
+    private String deviceUid;
+    private int rssi;
+
     public byte getDeviceId() {
         return id;
+    }
+
+    public void setDeviceId(byte deviceId) {
+        this.id = deviceId;
     }
 
     public byte getDevicePortCount() {
@@ -78,5 +84,29 @@ public class Device implements Serializable {
 
     public void setFragment(DevicePortsFragment fragment) {
         this.fragment = fragment;
+    }
+
+    public String getDeviceUid() {
+        return deviceUid;
+    }
+
+    public void setDeviceUid(String deviceUid) {
+        this.deviceUid = deviceUid;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public int getRssi() {
+        return rssi;
+    }
+
+    public void setRssi(int rssi) {
+        this.rssi = rssi;
     }
 }

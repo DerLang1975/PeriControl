@@ -18,10 +18,12 @@ import de.jkaumanns.pericontrol.view.fragments.ManualTabFragment;
 
 public class PeriControlMain extends AppCompatActivity {
 
+
     private CoordinatorLayout coordinatorLayout;
     private Toolbar toolbar;
     private TabLayout tabLayout;
     private LockableViewPager viewPager;
+
 
     //private CreateShowTabFragment showTab;
 
@@ -81,4 +83,5 @@ public class PeriControlMain extends AppCompatActivity {
             return mFragmentTitleList.get(position);
         }
     }
+
 }
