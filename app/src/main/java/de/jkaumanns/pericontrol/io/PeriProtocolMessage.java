@@ -5,7 +5,7 @@ import java.util.ArrayList;
 /**
  * Created by Joerg on 01.09.2016.
  */
-public class PeriProtocollMessage implements IPeriProtocollMessage {
+public class PeriProtocolMessage implements IPeriProtocolMessage {
 
     private byte deviceId;
     private byte command;
@@ -18,6 +18,7 @@ public class PeriProtocollMessage implements IPeriProtocollMessage {
     private String name;
     private byte portCount;
     private int portTimeout;
+    private byte deviceMode;
 
     @Override
     public void setRawResponse(byte[] rawResponse) {
@@ -35,31 +36,35 @@ public class PeriProtocollMessage implements IPeriProtocollMessage {
 
     private void checkContent() {
         switch (command) {
-            case PeriProtocollMessageFactory.COMMAND_GET_DEVICE_INFORMATION:
-                // (6+7+8): UID; (9): ID; (10): PortCount; (11+12): PortTimeOut;(13+14+15+16+17+18+19+20+21+22+23+24+25+26+27+28+29+30+31+32): DeviceName
+            case PeriProtocolMessageFactory.COMMAND_GET_DEVICE_INFORMATION:
+                // (6+7+8): UID; (9): ID; (10): PortCount; (11+12): PortTimeOut; (13): Mode; (14->33): DeviceName
                 uid = (char) rawResponse[6] + (char) rawResponse[7] + (char) rawResponse[8] + "";
                 deviceId = rawResponse[9];
                 portCount = rawResponse[10];
                 portTimeout = rawResponse[11];
                 portTimeout <<= 8;
                 portTimeout |= rawResponse[12];
+                deviceMode = rawResponse[13];
                 name = "";
                 for (int i = 0; i < 20; i++) {
-                    name += (char) rawResponse[13 + i] + "";
+                    name += (char) rawResponse[14 + i] + "";
                 }
                 name = name.trim();
                 break;
-            case PeriProtocollMessageFactory.COMMAND_GET_DEVICE_UID:
+            case PeriProtocolMessageFactory.COMMAND_GET_DEVICE_UID:
                 uid = (char) rawResponse[6] + (char) rawResponse[7] + (char) rawResponse[8] + "";
                 break;
-            case PeriProtocollMessageFactory.COMMAND_GET_DEVICE_NAME:
+            case PeriProtocolMessageFactory.COMMAND_GET_DEVICE_ID:
+                deviceId = rawResponse[6];
+                break;
+            case PeriProtocolMessageFactory.COMMAND_GET_DEVICE_NAME:
                 name = "";
                 for (int i = 0; i < 20; i++) {
                     name += (char) rawResponse[6 + i] + "";
                 }
                 name = name.trim();
                 break;
-            case PeriProtocollMessageFactory.COMMAND_GET_DEVICE_PORT_COUNT:
+            case PeriProtocolMessageFactory.COMMAND_GET_DEVICE_PORT_COUNT:
                 portCount = rawResponse[6];
                 break;
         }

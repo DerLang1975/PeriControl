@@ -175,30 +175,31 @@ public class UsbGateway extends BroadcastReceiver implements IGateway {
     }
 
     @Override
-    public int writeMessage(IPeriProtocollMessage message) {
+    public int writeMessage(IPeriProtocolMessage message) {
         int returnMessageId = Integer.MIN_VALUE;
         if (isConnected) {
             returnMessageId = messageId++;
-            message.setMessageId((byte) returnMessageId);
+            if (messageId > 65535) messageId = 0;
+            message.setMessageId(returnMessageId);
             serialPort.write(message.getMessage());
         }
         return returnMessageId;
     }
 
     @Override
-    public IPeriProtocollMessage retrieveMessage(int messageId) {
+    public IPeriProtocolMessage retrieveMessage(int messageId) {
         return retrieveMessage(messageId, 2000);
     }
 
     @Override
-    public IPeriProtocollMessage retrieveMessage(int messageId, int timeoutMills) {
+    public IPeriProtocolMessage retrieveMessage(int messageId, int timeoutMills) {
         long startMillis = System.currentTimeMillis();
-        IPeriProtocollMessage msg = null;
+        IPeriProtocolMessage msg = null;
         while (System.currentTimeMillis() <= startMillis + timeoutMills) {
             if (messages.containsKey(messageId)) {
                 LinkedList<byte[]> contents = messages.get(messageId);
                 if (contents.size() > 0) {
-                    msg = new PeriProtocollMessage();
+                    msg = new PeriProtocolMessage();
                     msg.setRawResponse(contents.poll());
                     break;
                 }
@@ -216,15 +217,15 @@ public class UsbGateway extends BroadcastReceiver implements IGateway {
 
 
     @Override
-    public ArrayList<IPeriProtocollMessage> retrieveMessage(int messageId, int maxMessageCount, int timeoutMills) {
+    public ArrayList<IPeriProtocolMessage> retrieveMessage(int messageId, int maxMessageCount, int timeoutMills) {
         int counter = maxMessageCount;
         long startMillis = System.currentTimeMillis();
-        ArrayList<IPeriProtocollMessage> responses = new ArrayList<>();
+        ArrayList<IPeriProtocolMessage> responses = new ArrayList<>();
         while (System.currentTimeMillis() <= startMillis + timeoutMills) {
             if (messages.containsKey(messageId)) {
                 LinkedList<byte[]> contents = messages.get(messageId);
                 if (contents.size() > 0) {
-                    PeriProtocollMessage msg = new PeriProtocollMessage();
+                    PeriProtocolMessage msg = new PeriProtocolMessage();
                     msg.setRawResponse(contents.poll());
                     responses.add(msg);
                     counter--;

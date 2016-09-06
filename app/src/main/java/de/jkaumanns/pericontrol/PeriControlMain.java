@@ -24,7 +24,7 @@ public class PeriControlMain extends AppCompatActivity {
     private TabLayout tabLayout;
     private LockableViewPager viewPager;
 
-
+    private ManualTabFragment manualTab;
     //private CreateShowTabFragment showTab;
 
     @Override
@@ -38,6 +38,8 @@ public class PeriControlMain extends AppCompatActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setTitle("Peri - Control");
 
+        manualTab = new ManualTabFragment();
+
         viewPager = (LockableViewPager) findViewById(R.id.viewpager);
         viewPager.setSwipeLocked(true);
         setupViewPager(viewPager);
@@ -48,7 +50,7 @@ public class PeriControlMain extends AppCompatActivity {
 
     private void setupViewPager(final ViewPager viewPager) {
         ViewPagerAdapter adapter = new ViewPagerAdapter(getSupportFragmentManager());
-        adapter.addFragment(new ManualTabFragment(), "Manual Mode");
+        adapter.addFragment(manualTab, "Manual Mode");
 //        adapter.addFragment(new ShowTabFragment(), "Show Mode");
 //        showTab = new CreateShowTabFragment();
 //        adapter.addFragment(showTab, "Create Show");

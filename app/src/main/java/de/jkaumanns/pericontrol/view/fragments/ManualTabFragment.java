@@ -12,30 +12,44 @@ import android.widget.ListView;
 import java.util.ArrayList;
 
 import de.jkaumanns.pericontrol.R;
+import de.jkaumanns.pericontrol.io.GatewayFactory;
 import de.jkaumanns.pericontrol.io.IGateway;
 import de.jkaumanns.pericontrol.model.Device;
 import de.jkaumanns.pericontrol.tasks.DiscoverDevicesAsyncTask;
 import de.jkaumanns.pericontrol.view.adapter.DeviceArrayAdapter;
+import de.jkaumanns.pericontrol.view.component.HorizontalNumberPicker;
 
 /**
  * Created by Joerg on 31.08.2016.
  */
 public class ManualTabFragment extends Fragment {
 
+    HorizontalNumberPicker.OnItemSelected numberPickerItemSelected = new HorizontalNumberPicker.OnItemSelected() {
+        @Override
+        public void onItemSelected(int index) {
+
+        }
+    };
     private IGateway gateway;
     private ListView lstDevices;
     private DeviceArrayAdapter deviceAdapter;
     private DiscoverDevicesAsyncTask discoverDevices;
-
+    private HorizontalNumberPicker numberPicker;
     private View.OnClickListener btnDiscoverDevicesClick = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
-
-//            if(bluetooth.isConnected()) {
-//                discoverDevices = new DiscoverDevices(bluetooth, deviceAdapter, null);
-//                discoverDevices.setRange(3);
-//                discoverDevices.execute();
-//            }
+            IGateway gateway = GatewayFactory.getGatewayInstance(getActivity());
+            discoverDevices = new DiscoverDevicesAsyncTask(gateway, deviceAdapter, getActivity());
+            discoverDevices.execute();
+        }
+    };
+    private View.OnClickListener btnDiscoverDeviceClick = new View.OnClickListener() {
+        @Override
+        public void onClick(View v) {
+            IGateway gateway = GatewayFactory.getGatewayInstance(getActivity());
+            discoverDevices = new DiscoverDevicesAsyncTask(gateway, deviceAdapter, getActivity());
+            int selectedItem = numberPicker.getSelectedItem();
+            discoverDevices.execute(selectedItem);
         }
     };
 
@@ -79,6 +93,12 @@ public class ManualTabFragment extends Fragment {
                 }
         );
         (view.findViewById(R.id.btnGetDevices)).setOnClickListener(btnDiscoverDevicesClick);
+        (view.findViewById(R.id.btnGetDevice)).setOnClickListener(btnDiscoverDeviceClick);
+        numberPicker = (HorizontalNumberPicker) view.findViewById(R.id.deviceIdSelector);
+        String[] values = new String[254];
+        for (int i = 1; i < 255; i++) values[i - 1] = i + "";
+        numberPicker.setValues(values);
+        numberPicker.setOnItemSelectedListener(numberPickerItemSelected);
         return view;
     }
 }

@@ -3,7 +3,7 @@ package de.jkaumanns.pericontrol.io;
 /**
  * Created by Joerg on 01.09.2016.
  */
-public class PeriProtocollMessageFactory {
+public class PeriProtocolMessageFactory {
 
     public static final byte COMMAND_GET_DEVICE_INFORMATION = (byte) 0x01;
     public static final byte COMMAND_GET_DEVICE_UID = (byte) 0x03;
@@ -23,22 +23,29 @@ public class PeriProtocollMessageFactory {
     public static final byte COMMAND_GET_DEVICE_GENERALA = (byte) 0x1F;
 
 
-    public static IPeriProtocollMessage createDiscoverDevicesMessage() {
-        PeriProtocollMessage msg = new PeriProtocollMessage();
-        msg.setCommand(COMMAND_GET_DEVICE_UID);
-        msg.setDeviceId(IPeriProtocollMessage.BROADCAST_MESSAGE);
+    public static IPeriProtocolMessage createDiscoverDevicesMessage() {
+        PeriProtocolMessage msg = new PeriProtocolMessage();
+        msg.setCommand(COMMAND_GET_DEVICE_INFORMATION);
+        msg.setDeviceId(IPeriProtocolMessage.BROADCAST_MESSAGE);
         return msg;
     }
 
-    public static IPeriProtocollMessage createGetDeviceName(byte deviceId) {
-        PeriProtocollMessage msg = new PeriProtocollMessage();
+    public static IPeriProtocolMessage createGetDeviceInformationMessage(byte deviceId) {
+        PeriProtocolMessage msg = new PeriProtocolMessage();
+        msg.setCommand(COMMAND_GET_DEVICE_INFORMATION);
+        msg.setDeviceId(deviceId);
+        return msg;
+    }
+
+    public static IPeriProtocolMessage createGetDeviceName(byte deviceId) {
+        PeriProtocolMessage msg = new PeriProtocolMessage();
         msg.setCommand(COMMAND_GET_DEVICE_NAME);
         msg.setDeviceId(deviceId);
         return msg;
     }
 
-    public static IPeriProtocollMessage createDevicePortCount(byte deviceId) {
-        PeriProtocollMessage msg = new PeriProtocollMessage();
+    public static IPeriProtocolMessage createDevicePortCount(byte deviceId) {
+        PeriProtocolMessage msg = new PeriProtocolMessage();
         msg.setCommand(COMMAND_GET_DEVICE_PORT_COUNT);
         msg.setDeviceId(deviceId);
         return msg;

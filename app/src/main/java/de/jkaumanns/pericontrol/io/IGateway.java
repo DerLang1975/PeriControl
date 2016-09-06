@@ -13,7 +13,7 @@ public interface IGateway {
      * @param message The message to send to the devices.
      * @return the message id which is related to the send message.
      */
-    int writeMessage(IPeriProtocollMessage message);
+    int writeMessage(IPeriProtocolMessage message);
 
     /**
      * Waits for the message belonging to the message id till the timeout of 2 seconds has reached.
@@ -21,7 +21,7 @@ public interface IGateway {
      * @param messageId the message from Gateway belonging to the message id.
      * @return Either null if message was not retrieved from Gateway or the response message.
      */
-    IPeriProtocollMessage retrieveMessage(int messageId);
+    IPeriProtocolMessage retrieveMessage(int messageId);
 
     /**
      * Waits for the message belonging to the message id till the timeout has reached.
@@ -30,7 +30,7 @@ public interface IGateway {
      * @param timeoutMills the time to wait for a response in milliseconds.
      * @return Either null if message was not retrieved from Gateway or the response message.
      */
-    IPeriProtocollMessage retrieveMessage(int messageId, int timeoutMills);
+    IPeriProtocolMessage retrieveMessage(int messageId, int timeoutMills);
 
     /**
      * Waits for the message belonging to the message id till the timeout has reached.
@@ -40,7 +40,7 @@ public interface IGateway {
      * @param timeoutMills
      * @return
      */
-    ArrayList<IPeriProtocollMessage> retrieveMessage(int messageId, int maxMessageCount, int timeoutMills);
+    ArrayList<IPeriProtocolMessage> retrieveMessage(int messageId, int maxMessageCount, int timeoutMills);
 
     /**
      * removes the messageId from the list.

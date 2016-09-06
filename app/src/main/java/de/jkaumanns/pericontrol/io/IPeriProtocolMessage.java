@@ -3,7 +3,7 @@ package de.jkaumanns.pericontrol.io;
 /**
  * Created by Joerg on 01.09.2016.
  */
-public interface IPeriProtocollMessage {
+public interface IPeriProtocolMessage {
 
     static final byte BROADCAST_MESSAGE = (byte) 0xFF;
 

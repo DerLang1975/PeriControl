@@ -7,7 +7,6 @@ import android.app.Activity;
  */
 public class GatewayFactory {
 
-
     private static IGateway gateway;
 
     public static IGateway getGatewayInstance(Activity activity) {
