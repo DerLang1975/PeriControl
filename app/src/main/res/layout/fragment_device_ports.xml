@@ -14,27 +14,28 @@
             android:layout_height="wrap_content"
             android:layout_alignParentRight="true"
             android:layout_centerVertical="true"
+            android:layout_marginRight="20dp"
             android:orientation="horizontal">
 
             <RadioButton
                 android:id="@+id/rbtnIdle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="8dp"
+                android:layout_marginLeft="16dp"
                 android:text="Idle" />
 
             <RadioButton
                 android:id="@+id/rbtnTest"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="8dp"
+                android:layout_marginLeft="16dp"
                 android:text="Test" />
 
             <RadioButton
                 android:id="@+id/rbtnArmed"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="8dp"
+                android:layout_marginLeft="16dp"
                 android:text="Armed" />
 
         </RadioGroup>
@@ -58,7 +59,6 @@
         android:layout_height="match_parent"
         android:layout_below="@+id/header"
         android:background="@color/colorAccent">
-
-
     </ListView>
+
 </RelativeLayout>

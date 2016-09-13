@@ -1,6 +1,7 @@
 package de.jkaumanns.pericontrol.view.adapter;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -23,9 +24,12 @@ public class DevicePortsArrayAdapter extends ArrayAdapter<DevicePortGroup> {
     private final Context context;
     private final ArrayList<DevicePortGroup> values;
     private final Device device;
+
     private Button.OnClickListener btnOnClickListener = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
+            v.setBackgroundColor(Color.RED);
+            v.invalidate();
             DevicePort channel = (DevicePort) v.getTag(R.integer.tagIdDevicePort);
             device.channelClicked(channel, v);
         }

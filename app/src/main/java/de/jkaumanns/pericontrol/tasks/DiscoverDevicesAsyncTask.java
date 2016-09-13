@@ -9,6 +9,7 @@ import java.lang.ref.WeakReference;
 import de.jkaumanns.pericontrol.R;
 import de.jkaumanns.pericontrol.io.GatewayFactory;
 import de.jkaumanns.pericontrol.io.IGateway;
+import de.jkaumanns.pericontrol.io.IPeriProtocolDeviceInformationMessage;
 import de.jkaumanns.pericontrol.io.IPeriProtocolMessage;
 import de.jkaumanns.pericontrol.io.PeriProtocolMessageFactory;
 import de.jkaumanns.pericontrol.model.Device;
@@ -19,24 +20,10 @@ import de.jkaumanns.pericontrol.view.adapter.DeviceArrayAdapter;
  */
 public class DiscoverDevicesAsyncTask extends AsyncTask<Integer, Object, Void> {
 
-    //        private Bluetooth bluetooth;
     private final DeviceArrayAdapter deviceAdapter;
     private WeakReference<Activity> weakActivity;
 
-//        private final byte COMMAND_GET_MODE                     = (byte)0x01;
-//        private byte[] messageGetMode                           = {(byte)0x00, COMMAND_GET_MODE};
-//
-//        private final byte COMMAND_GET_DEVICE_ID                = (byte)0x03;
-//        private final byte COMMAND_GET_CHANNEL_COUNT			= (byte)0x07;
-//        private final byte COMMAND_GET_DEVICE_NAME				= (byte)0x09;
-//
-//        private byte[] deviceIdMessage = {0x00, COMMAND_GET_DEVICE_ID};
-//        private byte[] deviceNameMessage = {0x00, COMMAND_GET_DEVICE_NAME};
-//        private byte[] deviceChannelCountMessage = {0x00, COMMAND_GET_CHANNEL_COUNT};
-//        private int range;
-
     public DiscoverDevicesAsyncTask(IGateway gateway, DeviceArrayAdapter deviceAdapter, Activity activity) {
-//            this.bluetooth = bluetooth;
         this.deviceAdapter = deviceAdapter;
         weakActivity = new WeakReference<Activity>(activity);
     }
@@ -46,12 +33,6 @@ public class DiscoverDevicesAsyncTask extends AsyncTask<Integer, Object, Void> {
         super.onPreExecute();
         Activity activity = weakActivity.get();
         if (activity != null) {
-            // TODO
-//                final TextView txt = (TextView)activity.findViewById(R.id.txtMode);
-//                synchronized (txt) {
-//                    txt.setText("Discovery startet: 0%");
-//                    txt.invalidate();
-//                }
             final Button btn = (Button) activity.findViewById(R.id.btnGetDevices);
             final Button btn2 = (Button) activity.findViewById(R.id.btnGetDevice);
             synchronized (btn) {
@@ -151,10 +132,10 @@ public class DiscoverDevicesAsyncTask extends AsyncTask<Integer, Object, Void> {
         IGateway gateway = GatewayFactory.getGatewayInstance(weakActivity.get());
         for (int i = 0; i < params.length; i++) {
             IPeriProtocolMessage sendMessage = PeriProtocolMessageFactory.createGetDeviceInformationMessage(params[i].byteValue());
-            int messageId = gateway.writeMessage(sendMessage);
-            IPeriProtocolMessage msg = gateway.retrieveMessage(messageId);
+            IPeriProtocolMessage message = gateway.writeMessage(sendMessage);
+            IPeriProtocolDeviceInformationMessage msg = (IPeriProtocolDeviceInformationMessage) gateway.retrieveMessage(message);
             if (msg != null) {
-                Device device = new Device();
+                Device device = new Device(weakActivity.get());
                 device.setDeviceUid(msg.getUid());
                 device.setName(msg.getName());
                 device.setDeviceId(msg.getDeviceId());
@@ -162,18 +143,18 @@ public class DiscoverDevicesAsyncTask extends AsyncTask<Integer, Object, Void> {
                 device.setDevicePortCount(msg.getPortCount());
                 publishProgress(device.getDeviceId(), device);
             }
-            gateway.clean(messageId);
+            gateway.clean(message.getMessageId());
         }
     }
 
     private void searchAllAnsweringDevices() {
         IGateway gateway = GatewayFactory.getGatewayInstance(weakActivity.get());
         IPeriProtocolMessage sendMessage = PeriProtocolMessageFactory.createDiscoverDevicesMessage();
-        int messageId = gateway.writeMessage(sendMessage);
+        IPeriProtocolMessage message = gateway.writeMessage(sendMessage);
         long startMillis = System.currentTimeMillis();
         while (System.currentTimeMillis() <= startMillis + 5000) {
-            IPeriProtocolMessage msg = gateway.retrieveMessage(messageId);
-            Device device = new Device();
+            IPeriProtocolDeviceInformationMessage msg = (IPeriProtocolDeviceInformationMessage) gateway.retrieveMessage(message);
+            Device device = new Device(weakActivity.get());
             device.setDeviceUid(msg.getUid());
             device.setName(msg.getName());
             device.setDeviceId(msg.getDeviceId());
@@ -181,6 +162,6 @@ public class DiscoverDevicesAsyncTask extends AsyncTask<Integer, Object, Void> {
             device.setDevicePortCount(msg.getPortCount());
             publishProgress(device.getDeviceId(), device);
         }
-        gateway.clean(messageId);
+        gateway.clean(message.getMessageId());
     }
 }

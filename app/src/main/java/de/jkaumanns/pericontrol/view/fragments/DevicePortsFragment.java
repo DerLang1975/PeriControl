@@ -21,6 +21,7 @@ public class DevicePortsFragment extends Fragment {
     private ListView lstDeviceChannels;
     private DevicePortsArrayAdapter deviceAdapter;
     private View view;
+
     private View.OnClickListener onRadioButtonClick = new View.OnClickListener() {
         @Override
         public void onClick(View v) {

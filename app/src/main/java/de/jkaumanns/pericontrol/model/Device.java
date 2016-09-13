@@ -1,10 +1,15 @@
 package de.jkaumanns.pericontrol.model;
 
+import android.app.Activity;
 import android.view.View;
 
 import java.io.Serializable;
+import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 
+import de.jkaumanns.pericontrol.io.GatewayFactory;
+import de.jkaumanns.pericontrol.io.IGateway;
+import de.jkaumanns.pericontrol.tasks.DevicePortFireAsyncTask;
 import de.jkaumanns.pericontrol.view.fragments.DevicePortsFragment;
 
 /**
@@ -16,6 +21,7 @@ public class Device implements Serializable {
     public static final byte MODE_TEST = 0x2A;
     public static final byte MODE_FIRE = 0x4A;
 
+    private WeakReference<Activity> weakActivity;
     private String uniqueIdentifier;
     private byte id;
     private byte portCount;
@@ -25,6 +31,10 @@ public class Device implements Serializable {
     private DevicePortsFragment fragment;
     private String deviceUid;
     private int rssi;
+
+    public Device(Activity activity) {
+        weakActivity = new WeakReference<>(activity);
+    }
 
     public byte getDeviceId() {
         return id;
@@ -72,9 +82,9 @@ public class Device implements Serializable {
 //            DeviceChannelAsyncTask dc = new DeviceChannelAsyncTask(bluetooth, this, view);
 //            dc.execute(DeviceChannelAsyncTask.CHANNEL_RESISTANCE, channel.getChannelId());
         } else if (mode == Device.MODE_FIRE) {
-            // TODO
-//            DeviceChannelAsyncTask dc = new DeviceChannelAsyncTask(bluetooth, this, view);
-//            dc.execute(DeviceChannelAsyncTask.FIRE_CHANNEL, channel.getChannelId());
+            IGateway gateway = GatewayFactory.getGatewayInstance(weakActivity.get());
+            DevicePortFireAsyncTask dpf = new DevicePortFireAsyncTask(gateway, this, v);
+            dpf.execute(port.getPortId());
         }
     }
 

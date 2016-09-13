@@ -175,7 +175,7 @@ public class UsbGateway extends BroadcastReceiver implements IGateway {
     }
 
     @Override
-    public int writeMessage(IPeriProtocolMessage message) {
+    public IPeriProtocolMessage writeMessage(IPeriProtocolMessage message) {
         int returnMessageId = Integer.MIN_VALUE;
         if (isConnected) {
             returnMessageId = messageId++;
@@ -183,24 +183,24 @@ public class UsbGateway extends BroadcastReceiver implements IGateway {
             message.setMessageId(returnMessageId);
             serialPort.write(message.getMessage());
         }
-        return returnMessageId;
+        return message;
     }
 
     @Override
-    public IPeriProtocolMessage retrieveMessage(int messageId) {
-        return retrieveMessage(messageId, 2000);
+    public IPeriProtocolMessage retrieveMessage(IPeriProtocolMessage message) {
+        return retrieveMessage(message, 2000);
     }
 
     @Override
-    public IPeriProtocolMessage retrieveMessage(int messageId, int timeoutMills) {
+    public IPeriProtocolMessage retrieveMessage(IPeriProtocolMessage message, int timeoutMills) {
         long startMillis = System.currentTimeMillis();
         IPeriProtocolMessage msg = null;
         while (System.currentTimeMillis() <= startMillis + timeoutMills) {
-            if (messages.containsKey(messageId)) {
-                LinkedList<byte[]> contents = messages.get(messageId);
+            if (messages.containsKey(message.getMessageId())) {
+                LinkedList<byte[]> contents = messages.get(message.getMessageId());
                 if (contents.size() > 0) {
-                    msg = new PeriProtocolMessage();
-                    msg.setRawResponse(contents.poll());
+                    message.setRawResponse(contents.poll());
+                    msg = message;
                     break;
                 }
             }
@@ -217,17 +217,16 @@ public class UsbGateway extends BroadcastReceiver implements IGateway {
 
 
     @Override
-    public ArrayList<IPeriProtocolMessage> retrieveMessage(int messageId, int maxMessageCount, int timeoutMills) {
+    public ArrayList<IPeriProtocolMessage> retrieveMessage(IPeriProtocolMessage message, int maxMessageCount, int timeoutMills) {
         int counter = maxMessageCount;
         long startMillis = System.currentTimeMillis();
         ArrayList<IPeriProtocolMessage> responses = new ArrayList<>();
         while (System.currentTimeMillis() <= startMillis + timeoutMills) {
-            if (messages.containsKey(messageId)) {
-                LinkedList<byte[]> contents = messages.get(messageId);
+            if (messages.containsKey(message.getMessageId())) {
+                LinkedList<byte[]> contents = messages.get(message.getMessageId());
                 if (contents.size() > 0) {
-                    PeriProtocolMessage msg = new PeriProtocolMessage();
-                    msg.setRawResponse(contents.poll());
-                    responses.add(msg);
+                    message.setRawResponse(contents.poll());
+                    responses.add(message);
                     counter--;
                     if (counter == 0) break;
                 }

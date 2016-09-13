@@ -9,7 +9,7 @@ public interface IPeriProtocolMessage {
 
     void setCommand(byte command);
 
-    void setMessageId(int messageId);
+    void setDeviceId(byte deviceId);
 
     void addParameter(byte param);
 
@@ -25,15 +25,7 @@ public interface IPeriProtocolMessage {
 
     int getRssi();
 
-    String getUid();
+    int getMessageId();
 
-    String getName();
-
-    byte getDeviceId();
-
-    void setDeviceId(byte deviceId);
-
-    byte getPortCount();
-
-    int getPortTimeout();
+    void setMessageId(int messageId);
 }
