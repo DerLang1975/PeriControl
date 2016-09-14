@@ -67,14 +67,19 @@ public abstract class PeriProtocolMessage implements IPeriProtocolMessage {
 
     @Override
     public byte[] getMessage() {
-        byte[] b = new byte[4 + parameters.size()];
-        b[0] = (byte) (messageId >> 8);
-        b[1] = (byte) (messageId & 0xFF);
-        b[2] = deviceId;
-        b[3] = command;
+        byte[] b = new byte[8 + parameters.size()];
+        int k = 0;
+        b[k++] = (byte) 0xCA;
+        b[k++] = (byte) 0xFA;
+        b[k++] = (byte) (messageId >> 8);
+        b[k++] = (byte) (messageId & 0xFF);
+        b[k++] = deviceId;
+        b[k++] = command;
         for (int i = 0; i < parameters.size(); i++) {
-            b[4 + i] = parameters.get(i);
+            b[k++] = parameters.get(i);
         }
+        b[k++] = (byte) 0xCA;
+        b[k++] = (byte) 0xFE;
         return b;
     }
 

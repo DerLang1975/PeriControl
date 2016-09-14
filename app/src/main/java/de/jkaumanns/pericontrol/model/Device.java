@@ -1,6 +1,7 @@
 package de.jkaumanns.pericontrol.model;
 
 import android.app.Activity;
+import android.util.Log;
 import android.view.View;
 
 import java.io.Serializable;
@@ -49,8 +50,9 @@ public class Device implements Serializable {
     }
 
     public void setDevicePortCount(byte devicePortCount) {
-        this.portCount = portCount;
-        portGroups = new ArrayList<DevicePortGroup>();
+        Log.d("PeriC", "Begin setDevicePortCount: " + devicePortCount);
+        this.portCount = devicePortCount;
+        portGroups = new ArrayList<>();
         for (int i = 0; i < portCount; i += 5) {
             int channelFrom = i + 1;
             int maxPerRow = 5;

@@ -7,6 +7,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.EditText;
 import android.widget.ListView;
 
 import java.util.ArrayList;
@@ -34,7 +35,7 @@ public class ManualTabFragment extends Fragment {
     private ListView lstDevices;
     private DeviceArrayAdapter deviceAdapter;
     private DiscoverDevicesAsyncTask discoverDevices;
-    private HorizontalNumberPicker numberPicker;
+    private EditText numberPicker;
     private View.OnClickListener btnDiscoverDevicesClick = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
@@ -48,7 +49,7 @@ public class ManualTabFragment extends Fragment {
         public void onClick(View v) {
             IGateway gateway = GatewayFactory.getGatewayInstance(getActivity());
             discoverDevices = new DiscoverDevicesAsyncTask(gateway, deviceAdapter, getActivity());
-            int selectedItem = numberPicker.getSelectedItem();
+            int selectedItem = Integer.parseInt(numberPicker.getText().toString());
             discoverDevices.execute(selectedItem);
         }
     };
@@ -94,11 +95,7 @@ public class ManualTabFragment extends Fragment {
         );
         (view.findViewById(R.id.btnGetDevices)).setOnClickListener(btnDiscoverDevicesClick);
         (view.findViewById(R.id.btnGetDevice)).setOnClickListener(btnDiscoverDeviceClick);
-        numberPicker = (HorizontalNumberPicker) view.findViewById(R.id.deviceIdSelector);
-        String[] values = new String[254];
-        for (int i = 1; i < 255; i++) values[i - 1] = i + "";
-        numberPicker.setValues(values);
-        numberPicker.setOnItemSelectedListener(numberPickerItemSelected);
+        numberPicker = (EditText) view.findViewById(R.id.deviceIdSelector);
         return view;
     }
 }

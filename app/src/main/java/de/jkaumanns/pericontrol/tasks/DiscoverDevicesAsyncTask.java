@@ -2,6 +2,7 @@ package de.jkaumanns.pericontrol.tasks;
 
 import android.app.Activity;
 import android.os.AsyncTask;
+import android.util.Log;
 import android.widget.Button;
 
 import java.lang.ref.WeakReference;
@@ -148,20 +149,27 @@ public class DiscoverDevicesAsyncTask extends AsyncTask<Integer, Object, Void> {
     }
 
     private void searchAllAnsweringDevices() {
+        Log.d("PeriC", "Begin searchAllAnsweringDevices");
         IGateway gateway = GatewayFactory.getGatewayInstance(weakActivity.get());
         IPeriProtocolMessage sendMessage = PeriProtocolMessageFactory.createDiscoverDevicesMessage();
+        Log.d("PeriC", "searchAllAnsweringDevices->sendMessage");
         IPeriProtocolMessage message = gateway.writeMessage(sendMessage);
         long startMillis = System.currentTimeMillis();
         while (System.currentTimeMillis() <= startMillis + 5000) {
+            Log.d("PeriC", "searchAllAnsweringDevices->start retrieveMessage");
             IPeriProtocolDeviceInformationMessage msg = (IPeriProtocolDeviceInformationMessage) gateway.retrieveMessage(message);
-            Device device = new Device(weakActivity.get());
-            device.setDeviceUid(msg.getUid());
-            device.setName(msg.getName());
-            device.setDeviceId(msg.getDeviceId());
-            device.setRssi(msg.getRssi());
-            device.setDevicePortCount(msg.getPortCount());
-            publishProgress(device.getDeviceId(), device);
+            if (msg != null) {
+                Log.d("PeriC", "searchAllAnsweringDevices->Found a device");
+                Device device = new Device(weakActivity.get());
+                device.setDeviceUid(msg.getUid());
+                device.setName(msg.getName());
+                device.setDeviceId(msg.getDeviceId());
+                device.setRssi(msg.getRssi());
+                device.setDevicePortCount(msg.getPortCount());
+                publishProgress(device.getDeviceId(), device);
+            }
         }
+        Log.d("PeriC", "searchAllAnsweringDevices->Finish Discover device");
         gateway.clean(message.getMessageId());
     }
 }

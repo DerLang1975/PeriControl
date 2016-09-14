@@ -5,6 +5,7 @@ import android.app.PendingIntent;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.hardware.usb.UsbDevice;
 import android.hardware.usb.UsbDeviceConnection;
 import android.hardware.usb.UsbManager;
@@ -41,19 +42,35 @@ public class UsbGateway extends BroadcastReceiver implements IGateway {
     private UsbSerialDevice serialPort;
     private UsbDeviceConnection connection;
     private boolean isConnected = false;
-    private HashMap<Integer, LinkedList<byte[]>> messages;
+    private HashMap<Integer, LinkedList<byte[]>> messages = new HashMap<>();
     // Tricky: Sync a async message
     UsbSerialInterface.UsbReadCallback mCallback = new UsbSerialInterface.UsbReadCallback() { //Defining a Callback which triggers whenever data is read.
         @Override
         public void onReceivedData(byte[] content) {
+            Log.d("PeriC", "Begin onReceivedData: " + byteArrayToHex(content));
             for (int i = 0; i < content.length; i++) byteList.add(content[i]);
             extractMessage();
         }
     };
 
     public UsbGateway(Activity activity) {
+        Log.d("PeriC", "Begin UsbGateway");
         usbManager = (UsbManager) activity.getSystemService(Activity.USB_SERVICE);
         weakActivity = new WeakReference<>(activity);
+        IntentFilter filter = new IntentFilter();
+        filter.addAction(ACTION_USB_PERMISSION);
+        filter.addAction(UsbManager.ACTION_USB_DEVICE_ATTACHED);
+        filter.addAction(UsbManager.ACTION_USB_DEVICE_DETACHED);
+        activity.registerReceiver(this, filter);
+        startUsb();
+        Log.d("PeriC", "End UsbGateway");
+    }
+
+    public static String byteArrayToHex(byte[] a) {
+        StringBuilder sb = new StringBuilder(a.length * 2);
+        for (byte b : a)
+            sb.append(String.format("%02x", b & 0xff));
+        return sb.toString();
     }
 
     public boolean isConnected() {
@@ -62,13 +79,18 @@ public class UsbGateway extends BroadcastReceiver implements IGateway {
 
     @Override
     public void onReceive(Context context, Intent intent) {
+        Log.d("PeriC", "Begin onReceive");
         if (intent.getAction().equals(ACTION_USB_PERMISSION)) {
+            Log.d("PeriC", "onReceive->ACTION_USB_PERMISSION");
             boolean granted = intent.getExtras().getBoolean(UsbManager.EXTRA_PERMISSION_GRANTED);
             if (granted) {
+                Log.d("PeriC", "onReceive->Granted");
                 connection = usbManager.openDevice(usbDevice);
                 serialPort = UsbSerialDevice.createUsbSerialDevice(usbDevice, connection);
                 if (serialPort != null) {
+                    Log.d("PeriC", "onReceive->got a serialPort ");
                     if (serialPort.open()) { //Set Serial Connection Parameters.
+                        Log.d("PeriC", "onReceive->serialPort opened");
                         serialPort.setBaudRate(9600);
                         serialPort.setDataBits(UsbSerialInterface.DATA_BITS_8);
                         serialPort.setStopBits(UsbSerialInterface.STOP_BITS_1);
@@ -77,15 +99,15 @@ public class UsbGateway extends BroadcastReceiver implements IGateway {
                         serialPort.read(mCallback);
                         isConnected = true;
                     } else {
-                        Log.d("SERIAL", "PORT NOT OPEN");
+                        Log.d("PeriC", "onReceive->PORT NOT OPEN");
                         isConnected = false;
                     }
                 } else {
-                    Log.d("SERIAL", "PORT IS NULL");
+                    Log.d("PeriC", "onReceive->PORT IS NULL");
                     isConnected = false;
                 }
             } else {
-                Log.d("SERIAL", "PERM NOT GRANTED");
+                Log.d("PeriC", "onReceive->PERM NOT GRANTED");
                 isConnected = false;
             }
         } else if (intent.getAction().equals(UsbManager.ACTION_USB_DEVICE_ATTACHED)) {
@@ -96,23 +118,31 @@ public class UsbGateway extends BroadcastReceiver implements IGateway {
     }
 
     private void endUsb() {
+        Log.d("PeriC", "Begin endUsb");
         serialPort.close();
         isConnected = false;
     }
 
     private void startUsb() {
+        Log.d("PeriC", "Begin startUsb");
         HashMap<String, UsbDevice> usbDevices = usbManager.getDeviceList();
         if (!usbDevices.isEmpty()) {
+            Log.d("PeriC", "startUsb->Usb devices found");
             boolean keep = true;
             for (Map.Entry<String, UsbDevice> entry : usbDevices.entrySet()) {
+                Log.d("PeriC", "startUsb->investigate device");
                 usbDevice = entry.getValue();
                 int deviceVID = usbDevice.getVendorId();
-                if (deviceVID == 0x2341) //Arduino Vendor ID
+                Log.d("PeriC", "startUsb->deviceId " + deviceVID);
+                if (deviceVID == 0x403) // 403=1027=FTDI 0x2341) //Arduino Vendor ID
                 {
+                    Log.d("PeriC", "startUsb->product id: " + usbDevice.getProductId());
+                    Log.d("PeriC", "startUsb->requestingPermission");
                     PendingIntent pi = PendingIntent.getBroadcast(weakActivity.get(), 0, new Intent(ACTION_USB_PERMISSION), 0);
                     usbManager.requestPermission(usbDevice, pi);
                     keep = false;
                 } else {
+                    Log.d("PeriC", "startUsb->Setting all to null");
                     connection = null;
                     usbDevice = null;
                     isConnected = false;
@@ -146,8 +176,9 @@ public class UsbGateway extends BroadcastReceiver implements IGateway {
                             // here we go. Message ended. buffer contains message.
                             byteList.poll(); // first remove last delimiter from queue
                             // check if content equals match.
-                            lastMessage = new byte[readPosition - 2];
-                            System.arraycopy(buffer, 2, lastMessage, 0, readPosition - 2);
+                            lastMessage = new byte[readPosition];
+                            System.arraycopy(buffer, 0, lastMessage, 0, readPosition);
+                            Log.d("PeriC", "extracted response message: " + byteArrayToHex(lastMessage));
                             addMessageToQueue(lastMessage);
                             startBytesFound = false;
                             readPosition = 0;
@@ -165,23 +196,30 @@ public class UsbGateway extends BroadcastReceiver implements IGateway {
         }
     }
 
-
     private void addMessageToQueue(byte[] lastMessage) {
-        if (!messages.containsKey((int) lastMessage[0])) {
-            messages.put((int) lastMessage[0], new LinkedList<byte[]>());
+        int msgId = lastMessage[0];
+        msgId <<= 8;
+        msgId |= lastMessage[1];
+        if (!messages.containsKey(msgId)) {
+            messages.put(msgId, new LinkedList<byte[]>());
         }
-        LinkedList<byte[]> queue = messages.get((int) lastMessage[0]);
+        LinkedList<byte[]> queue = messages.get(msgId);
         queue.add(lastMessage);
     }
 
     @Override
     public IPeriProtocolMessage writeMessage(IPeriProtocolMessage message) {
+        Log.d("PeriC", "Begin writeMessage");
         int returnMessageId = Integer.MIN_VALUE;
         if (isConnected) {
+            Log.d("PeriC", "writeMessage->Connected");
             returnMessageId = messageId++;
             if (messageId > 65535) messageId = 0;
+            Log.d("PeriC", "writeMessage->MessageId: " + returnMessageId);
             message.setMessageId(returnMessageId);
-            serialPort.write(message.getMessage());
+            byte b[] = message.getMessage();
+            Log.d("PeriC", "writeMessage->msg: " + byteArrayToHex(b));
+            serialPort.write(b);
         }
         return message;
     }
