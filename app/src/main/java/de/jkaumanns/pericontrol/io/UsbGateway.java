@@ -20,6 +20,8 @@ import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.Map;
 
+import de.jkaumanns.pericontrol.PeriControlMain;
+
 /**
  * Created by Joerg on 01.09.2016.
  */
@@ -47,7 +49,7 @@ public class UsbGateway extends BroadcastReceiver implements IGateway {
     UsbSerialInterface.UsbReadCallback mCallback = new UsbSerialInterface.UsbReadCallback() { //Defining a Callback which triggers whenever data is read.
         @Override
         public void onReceivedData(byte[] content) {
-            Log.d("PeriC", "Begin onReceivedData: " + byteArrayToHex(content));
+            Log.d("PeriC", "Begin onReceivedData: " + PeriControlMain.byteArrayToHex(content));
             for (int i = 0; i < content.length; i++) byteList.add(content[i]);
             extractMessage();
         }
@@ -64,13 +66,6 @@ public class UsbGateway extends BroadcastReceiver implements IGateway {
         activity.registerReceiver(this, filter);
         startUsb();
         Log.d("PeriC", "End UsbGateway");
-    }
-
-    public static String byteArrayToHex(byte[] a) {
-        StringBuilder sb = new StringBuilder(a.length * 2);
-        for (byte b : a)
-            sb.append(String.format("%02x", b & 0xff));
-        return sb.toString();
     }
 
     public boolean isConnected() {
@@ -178,7 +173,7 @@ public class UsbGateway extends BroadcastReceiver implements IGateway {
                             // check if content equals match.
                             lastMessage = new byte[readPosition];
                             System.arraycopy(buffer, 0, lastMessage, 0, readPosition);
-                            Log.d("PeriC", "extracted response message: " + byteArrayToHex(lastMessage));
+                            Log.d("PeriC", "extracted response message: " + PeriControlMain.byteArrayToHex(lastMessage));
                             addMessageToQueue(lastMessage);
                             startBytesFound = false;
                             readPosition = 0;
@@ -218,7 +213,7 @@ public class UsbGateway extends BroadcastReceiver implements IGateway {
             Log.d("PeriC", "writeMessage->MessageId: " + returnMessageId);
             message.setMessageId(returnMessageId);
             byte b[] = message.getMessage();
-            Log.d("PeriC", "writeMessage->msg: " + byteArrayToHex(b));
+            Log.d("PeriC", "writeMessage->msg: " + PeriControlMain.byteArrayToHex(b));
             serialPort.write(b);
         }
         return message;

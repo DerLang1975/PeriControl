@@ -2,6 +2,7 @@ package de.jkaumanns.pericontrol.tasks;
 
 import android.graphics.Color;
 import android.os.AsyncTask;
+import android.util.Log;
 import android.view.View;
 
 import de.jkaumanns.pericontrol.io.IGateway;
@@ -57,6 +58,7 @@ public class DevicePortFireAsyncTask extends AsyncTask<Integer, Boolean, Boolean
 
     @Override
     protected Boolean doInBackground(Integer... params) {
+        Log.d("PeriC", "Begin DevicePortFireAsyncTask.doInBackground");
         if (params.length == 0) return null;
         IPeriProtocolMessage message = PeriProtocolMessageFactory.createFirePort(device.getDeviceId(), params[0].byteValue());
         message = gateway.writeMessage(message);
@@ -68,6 +70,7 @@ public class DevicePortFireAsyncTask extends AsyncTask<Integer, Boolean, Boolean
                 publishProgress(retValue);
             }
         }
+        Log.d("PeriC", "End DevicePortFireAsyncTask.doInBackground");
         return retValue;
     }
 }

@@ -13,6 +13,7 @@ import android.support.v7.widget.Toolbar;
 import java.util.ArrayList;
 import java.util.List;
 
+import de.jkaumanns.pericontrol.io.GatewayFactory;
 import de.jkaumanns.pericontrol.view.component.LockableViewPager;
 import de.jkaumanns.pericontrol.view.fragments.ManualTabFragment;
 
@@ -26,6 +27,13 @@ public class PeriControlMain extends AppCompatActivity {
 
     private ManualTabFragment manualTab;
     //private CreateShowTabFragment showTab;
+
+    public static String byteArrayToHex(byte[] a) {
+        StringBuilder sb = new StringBuilder(a.length * 2);
+        for (byte b : a)
+            sb.append(String.format("%02x", b & 0xff));
+        return sb.toString();
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,6 +54,8 @@ public class PeriControlMain extends AppCompatActivity {
 
         tabLayout = (TabLayout) findViewById(R.id.tabs);
         tabLayout.setupWithViewPager(viewPager);
+
+        GatewayFactory.getGatewayInstance(this);
     }
 
     private void setupViewPager(final ViewPager viewPager) {
@@ -85,5 +95,4 @@ public class PeriControlMain extends AppCompatActivity {
             return mFragmentTitleList.get(position);
         }
     }
-
 }

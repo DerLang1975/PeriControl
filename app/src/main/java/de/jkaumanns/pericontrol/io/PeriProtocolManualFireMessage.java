@@ -6,16 +6,23 @@ package de.jkaumanns.pericontrol.io;
 public class PeriProtocolManualFireMessage extends PeriProtocolMessage implements IPeriProtocolManualFireMessage {
 
     private boolean isPortFired = false;
+    private byte port;
 
     @Override
     protected void checkContent() {
         if (command == PeriProtocolMessageFactory.COMMAND_FIRE_CHANNEL) {
-            this.isPortFired = rawResponse[6] == (byte) 0x01;
+            this.port = rawResponse[6];
+            this.isPortFired = rawResponse[7] == (byte) 0x01;
         }
     }
 
     @Override
     public boolean isPortFired() {
         return this.isPortFired;
+    }
+
+    @Override
+    public byte getPort() {
+        return this.port;
     }
 }

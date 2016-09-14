@@ -7,4 +7,5 @@ public interface IPeriProtocolManualFireMessage extends IPeriProtocolMessage {
 
     boolean isPortFired();
 
+    byte getPort();
 }

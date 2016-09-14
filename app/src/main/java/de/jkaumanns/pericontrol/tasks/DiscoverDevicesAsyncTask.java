@@ -92,40 +92,6 @@ public class DiscoverDevicesAsyncTask extends AsyncTask<Integer, Object, Void> {
         } else {
             searchAllAnsweringDevices();
         }
-
-//            MessageHandler handler = MessageHandler.newInstance();
-//            for(int i=2; i<range; i++) {
-//                Device device = null;
-//                messageGetMode[0] = (byte)i;
-//                int messageId = bluetooth.sendMessage(messageGetMode);
-//                Message msg = handler.waitForContent(messageId, i);
-//                if(msg != null && msg.startsWith(new byte[]{COMMAND_GET_MODE})) {
-//                    device = new Device(msg.getClientId(), bluetooth);
-//                    device.setMode(msg.getContent()[1]);
-//                    deviceIdMessage[0] = (byte)i;
-//                    deviceChannelCountMessage[0] = (byte)i;
-//                    deviceNameMessage[0] = (byte)i;
-//                    messageId = bluetooth.sendMessage(deviceIdMessage);
-//                    msg = handler.waitForContent(messageId, i);
-//                    if(msg != null && msg.startsWith(new byte[]{COMMAND_GET_DEVICE_ID})) {
-//                        Log.d("DiscoverDevices", "DeviceId received " + msg.getContent()[1]);
-//                        messageId = bluetooth.sendMessage(deviceChannelCountMessage);
-//                        msg = handler.waitForContent(messageId, i);
-//                        if(msg != null && msg.startsWith(new byte[]{COMMAND_GET_CHANNEL_COUNT})) {
-//                            device.setDeviceChannels(msg.getContent()[1]);
-//                            Log.d("DiscoverDevices", "ChannelCount received " + msg.getContent()[1]);
-//                        }
-//                        messageId = bluetooth.sendMessage(deviceNameMessage);
-//                        msg = handler.waitForContent(messageId, i);
-//                        if(msg != null && msg.startsWith(new byte[]{COMMAND_GET_DEVICE_NAME})) {
-//                            String s = new String(msg.getContent(), 1, msg.getContent().length - 1);
-//                            device.setDeviceName(s);
-//                            Log.d("DiscoverDevices", "DeviceName received " + s);
-//                        }
-//                    }
-//                }
-//                publishProgress((byte)i, device);
-//            }
         return null;
     }
 
