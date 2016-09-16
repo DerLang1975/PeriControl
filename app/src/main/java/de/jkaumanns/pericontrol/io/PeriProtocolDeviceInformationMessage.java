@@ -2,6 +2,9 @@ package de.jkaumanns.pericontrol.io;
 
 import android.util.Log;
 
+import java.nio.ByteBuffer;
+import java.nio.ByteOrder;
+
 /**
  * Created by Joerg on 10.09.2016.
  */
@@ -48,12 +51,14 @@ public class PeriProtocolDeviceInformationMessage extends PeriProtocolMessage im
             uid += String.valueOf((char) rawResponse[start++]);
             deviceId = rawResponse[start++];
             portCount = rawResponse[start++];
-            Log.d("PeriC", "portTimeout: " + portTimeout);
-            portTimeout = rawResponse[start++];
-            Log.d("PeriC", "portTimeout: " + portTimeout);
-            portTimeout <<= 8;
-            Log.d("PeriC", "portTimeout: " + portTimeout);
-            portTimeout |= rawResponse[start++];
+            ByteBuffer buffer = ByteBuffer.allocate(4);
+            buffer.order(ByteOrder.BIG_ENDIAN);
+            buffer.put((byte) 0x00);
+            buffer.put((byte) 0x00);
+            buffer.put(rawResponse[start++]);
+            buffer.put(rawResponse[start++]);
+            buffer.flip();
+            portTimeout = buffer.getInt();
             Log.d("PeriC", "portTimeout: " + portTimeout);
             deviceMode = rawResponse[start++];
             name = "";
