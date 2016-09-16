@@ -26,7 +26,7 @@ public class DiscoverDevicesAsyncTask extends AsyncTask<Integer, Object, Void> {
 
     public DiscoverDevicesAsyncTask(IGateway gateway, DeviceArrayAdapter deviceAdapter, Activity activity) {
         this.deviceAdapter = deviceAdapter;
-        weakActivity = new WeakReference<Activity>(activity);
+        weakActivity = new WeakReference<>(activity);
     }
 
     @Override
@@ -78,7 +78,9 @@ public class DiscoverDevicesAsyncTask extends AsyncTask<Integer, Object, Void> {
         if (activity != null) {
             synchronized (deviceAdapter) {
                 if (values.length > 1 && values[1] != null) {
-                    deviceAdapter.add((Device) values[1]);
+                    DeviceArrayAdapter.DeviceArrayAdapterHolder holder = new DeviceArrayAdapter.DeviceArrayAdapterHolder();
+                    holder.device = (Device) values[1];
+                    deviceAdapter.add(holder);
                     deviceAdapter.notifyDataSetChanged();
                 }
             }
@@ -108,6 +110,7 @@ public class DiscoverDevicesAsyncTask extends AsyncTask<Integer, Object, Void> {
                 device.setDeviceId(msg.getDeviceId());
                 device.setRssi(msg.getRssi());
                 device.setDevicePortCount(msg.getPortCount());
+                device.setPortTimeout(msg.getPortTimeout());
                 publishProgress(device.getDeviceId(), device);
             }
             gateway.clean(message.getMessageId());
@@ -132,6 +135,7 @@ public class DiscoverDevicesAsyncTask extends AsyncTask<Integer, Object, Void> {
                 device.setDeviceId(msg.getDeviceId());
                 device.setRssi(msg.getRssi());
                 device.setDevicePortCount(msg.getPortCount());
+                device.setPortTimeout(msg.getPortTimeout());
                 publishProgress(device.getDeviceId(), device);
             }
         }

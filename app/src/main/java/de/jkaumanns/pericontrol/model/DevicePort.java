@@ -1,9 +1,12 @@
 package de.jkaumanns.pericontrol.model;
 
+import java.io.Serializable;
+
 /**
  * Created by Joerg on 01.09.2016.
  */
-public class DevicePort {
+public class DevicePort implements Serializable {
+    private static final long serialVersionUID = -4124273230291241956L;
 
     int portId = -1;
     boolean available = false;

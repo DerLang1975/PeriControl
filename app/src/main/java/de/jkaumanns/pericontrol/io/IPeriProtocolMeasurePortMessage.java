@@ -11,4 +11,7 @@ public interface IPeriProtocolMeasurePortMessage extends IPeriProtocolMessage {
 
     String getFireVoltage();
 
+    double getPowerValue();
+
+    byte getPort();
 }

@@ -14,13 +14,13 @@ import de.jkaumanns.pericontrol.model.Device;
 /**
  * Created by Joerg on 06.09.2016.
  */
-public class DevicePortFireAsyncTask extends AsyncTask<Integer, Boolean, Boolean> {
+public class DeviceFirePortAsyncTask extends AsyncTask<Integer, Boolean, Boolean> {
 
     private Device device;
     private IGateway gateway;
     private View view;
 
-    public DevicePortFireAsyncTask(IGateway gateway, Device device, View v) {
+    public DeviceFirePortAsyncTask(IGateway gateway, Device device, View v) {
         this.device = device;
         this.gateway = gateway;
         this.view = v;
@@ -58,7 +58,7 @@ public class DevicePortFireAsyncTask extends AsyncTask<Integer, Boolean, Boolean
 
     @Override
     protected Boolean doInBackground(Integer... params) {
-        Log.d("PeriC", "Begin DevicePortFireAsyncTask.doInBackground");
+        Log.d("PeriC", "Begin DeviceFirePortAsyncTask.doInBackground");
         if (params.length == 0) return null;
         IPeriProtocolMessage message = PeriProtocolMessageFactory.createFirePort(device.getDeviceId(), params[0].byteValue());
         message = gateway.writeMessage(message);
@@ -70,7 +70,7 @@ public class DevicePortFireAsyncTask extends AsyncTask<Integer, Boolean, Boolean
                 publishProgress(retValue);
             }
         }
-        Log.d("PeriC", "End DevicePortFireAsyncTask.doInBackground");
+        Log.d("PeriC", "End DeviceFirePortAsyncTask.doInBackground");
         return retValue;
     }
 }

@@ -10,28 +10,27 @@ import java.util.ArrayList;
 
 import de.jkaumanns.pericontrol.io.GatewayFactory;
 import de.jkaumanns.pericontrol.io.IGateway;
-import de.jkaumanns.pericontrol.tasks.DevicePortFireAsyncTask;
-import de.jkaumanns.pericontrol.view.fragments.DevicePortsFragment;
+import de.jkaumanns.pericontrol.tasks.DeviceFirePortAsyncTask;
+import de.jkaumanns.pericontrol.tasks.DeviceMeasurePortAsyncTask;
 
 /**
  * Created by Joerg on 01.09.2016.
  */
 public class Device implements Serializable {
-
     public static final byte MODE_IDLE = 0x0A;
     public static final byte MODE_TEST = 0x2A;
     public static final byte MODE_FIRE = 0x4A;
-
+    private static final long serialVersionUID = -6099312954099962806L;
     private WeakReference<Activity> weakActivity;
-    private String uniqueIdentifier;
+
     private byte id;
     private byte portCount;
     private byte mode;
     private String name;
     private ArrayList<DevicePortGroup> portGroups;
-    private DevicePortsFragment fragment;
     private String deviceUid;
     private int rssi;
+    private int portTimeout;
 
     public Device(Activity activity) {
         weakActivity = new WeakReference<>(activity);
@@ -80,22 +79,14 @@ public class Device implements Serializable {
 
     public void channelClicked(DevicePort port, View v) {
         if (mode == Device.MODE_TEST) {
-            // TODO
-//            DeviceChannelAsyncTask dc = new DeviceChannelAsyncTask(bluetooth, this, view);
-//            dc.execute(DeviceChannelAsyncTask.CHANNEL_RESISTANCE, channel.getChannelId());
+            IGateway gateway = GatewayFactory.getGatewayInstance(weakActivity.get());
+            DeviceMeasurePortAsyncTask dpf = new DeviceMeasurePortAsyncTask(gateway, this, v);
+            dpf.execute(port.getPortId());
         } else if (mode == Device.MODE_FIRE) {
             IGateway gateway = GatewayFactory.getGatewayInstance(weakActivity.get());
-            DevicePortFireAsyncTask dpf = new DevicePortFireAsyncTask(gateway, this, v);
+            DeviceFirePortAsyncTask dpf = new DeviceFirePortAsyncTask(gateway, this, v);
             dpf.execute(port.getPortId());
         }
-    }
-
-    public DevicePortsFragment getFragment() {
-        return fragment;
-    }
-
-    public void setFragment(DevicePortsFragment fragment) {
-        this.fragment = fragment;
     }
 
     public String getDeviceUid() {
@@ -121,4 +112,31 @@ public class Device implements Serializable {
     public void setRssi(int rssi) {
         this.rssi = rssi;
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if (o instanceof Device) {
+            return ((Device) o).getDeviceUid() == getDeviceUid();
+        }
+        return false;
+    }
+
+    @Override
+    public String toString() {
+        return getDeviceName();
+    }
+
+    @Override
+    public int hashCode() {
+        return getDeviceUid().hashCode();
+    }
+
+    public int getPortTimeout() {
+        return portTimeout;
+    }
+
+    public void setPortTimeout(int timeout) {
+        portTimeout = timeout;
+    }
+
 }

@@ -1,5 +1,7 @@
 package de.jkaumanns.pericontrol.io;
 
+import android.util.Log;
+
 /**
  * Created by Joerg on 10.09.2016.
  */
@@ -38,32 +40,41 @@ public class PeriProtocolDeviceInformationMessage extends PeriProtocolMessage im
 
     @Override
     protected void checkContent() {
+        int start = START_ARRAY_ID_OF_MESSAGE;
         if (command == PeriProtocolMessageFactory.COMMAND_GET_DEVICE_INFORMATION) {
             // (6+7+8): UID; (9): ID; (10): PortCount; (11+12): PortTimeOut; (13): Mode; (14->33): DeviceName
-            uid = (char) rawResponse[6] + (char) rawResponse[7] + (char) rawResponse[8] + "";
-            deviceId = rawResponse[9];
-            portCount = rawResponse[10];
-            portTimeout = rawResponse[11];
+            uid = String.valueOf((char) rawResponse[start++]);
+            uid += String.valueOf((char) rawResponse[start++]);
+            uid += String.valueOf((char) rawResponse[start++]);
+            deviceId = rawResponse[start++];
+            portCount = rawResponse[start++];
+            Log.d("PeriC", "portTimeout: " + portTimeout);
+            portTimeout = rawResponse[start++];
+            Log.d("PeriC", "portTimeout: " + portTimeout);
             portTimeout <<= 8;
-            portTimeout |= rawResponse[12];
-            deviceMode = rawResponse[13];
+            Log.d("PeriC", "portTimeout: " + portTimeout);
+            portTimeout |= rawResponse[start++];
+            Log.d("PeriC", "portTimeout: " + portTimeout);
+            deviceMode = rawResponse[start++];
             name = "";
             for (int i = 0; i < 20; i++) {
-                name += (char) rawResponse[14 + i] + "";
+                name += (char) rawResponse[start++] + "";
             }
             name = name.trim();
         } else if (command == PeriProtocolMessageFactory.COMMAND_GET_DEVICE_UID) {
-            uid = (char) rawResponse[6] + (char) rawResponse[7] + (char) rawResponse[8] + "";
+            uid = String.valueOf((char) rawResponse[start++]);
+            uid += String.valueOf((char) rawResponse[start++]);
+            uid += String.valueOf((char) rawResponse[start++]);
         } else if (command == PeriProtocolMessageFactory.COMMAND_GET_DEVICE_ID) {
-            deviceId = rawResponse[6];
+            deviceId = rawResponse[start++];
         } else if (command == PeriProtocolMessageFactory.COMMAND_GET_DEVICE_NAME) {
             name = "";
             for (int i = 0; i < 20; i++) {
-                name += (char) rawResponse[6 + i] + "";
+                name += (char) rawResponse[start++] + "";
             }
             name = name.trim();
         } else if (command == PeriProtocolMessageFactory.COMMAND_GET_DEVICE_PORT_COUNT) {
-            portCount = rawResponse[6];
+            portCount = rawResponse[start++];
         }
     }
 }

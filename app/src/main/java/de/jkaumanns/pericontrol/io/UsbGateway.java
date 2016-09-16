@@ -226,18 +226,26 @@ public class UsbGateway extends BroadcastReceiver implements IGateway {
 
     @Override
     public IPeriProtocolMessage retrieveMessage(IPeriProtocolMessage message, int timeoutMills) {
+        Log.d("PeriC", "Begin UsbGateway.retrieveMessage: " + message.getMessageId() + " - " + timeoutMills);
         long startMillis = System.currentTimeMillis();
         IPeriProtocolMessage msg = null;
         while (System.currentTimeMillis() <= startMillis + timeoutMills) {
             if (messages.containsKey(message.getMessageId())) {
                 LinkedList<byte[]> contents = messages.get(message.getMessageId());
                 if (contents.size() > 0) {
-                    message.setRawResponse(contents.poll());
+                    Log.d("PeriC", "At least one content for message id");
+                    if (isConnected()) {
+                        message.setRawResponse(contents.poll());
+                    } else {
+                        message.setRawResponse(new byte[]{});
+                    }
+                    Log.d("PeriC", "setting first content as message and return it.");
                     msg = message;
                     break;
                 }
             }
         }
+        Log.d("PeriC", "End UsbGateway.retrieveMessage");
         return msg;
     }
 

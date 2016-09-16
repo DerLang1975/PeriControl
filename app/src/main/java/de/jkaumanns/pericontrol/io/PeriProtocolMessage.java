@@ -7,6 +7,8 @@ import java.util.ArrayList;
  */
 public abstract class PeriProtocolMessage implements IPeriProtocolMessage {
 
+    protected final int START_ARRAY_ID_OF_MESSAGE = 6;
+
     protected byte deviceId;
     protected byte command;
     protected byte[] rawResponse;

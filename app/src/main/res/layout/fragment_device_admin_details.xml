@@ -1,0 +1,203 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:id="@+id/header"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <RelativeLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1">
+
+            <android.support.design.widget.TextInputLayout
+                android:id="@+id/tilDeviceUniqueId"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:layout_marginLeft="20dp"
+                android:layout_marginTop="10dp"
+                android:background="@drawable/border_rounded"
+                android:paddingBottom="10dp"
+                android:paddingLeft="15dp"
+                android:paddingRight="15dp"
+                android:paddingTop="16dp"
+                android:textColorHint="@color/text_color"
+                app:hintAnimationEnabled="true"
+                app:hintEnabled="true">
+
+                <android.support.design.widget.TextInputEditText
+                    android:id="@+id/txtDeviceUid"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:enabled="false"
+                    android:hint="Unique Id"
+                    android:inputType="number"
+                    android:maxLength="3"
+                    android:minWidth="80dp"
+                    android:text="123"
+                    android:textAlignment="center"
+                    android:textColor="@color/text_color"
+                    android:textSize="24dp"
+                    android:textStyle="bold" />
+            </android.support.design.widget.TextInputLayout>
+
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1">
+
+            <android.support.design.widget.TextInputLayout
+                android:id="@+id/tilDevicePortCount"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:layout_marginLeft="20dp"
+                android:layout_marginTop="10dp"
+                android:background="@drawable/border_rounded"
+                android:paddingBottom="10dp"
+                android:paddingLeft="15dp"
+                android:paddingRight="15dp"
+                android:paddingTop="16dp"
+                android:textColorHint="@color/text_color"
+                app:hintAnimationEnabled="true"
+                app:hintEnabled="true">
+
+                <android.support.design.widget.TextInputEditText
+                    android:id="@+id/txtDevicePortCount"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:enabled="false"
+                    android:hint="Port Count"
+                    android:inputType="number"
+                    android:maxLength="3"
+                    android:minWidth="80dp"
+                    android:text="24"
+                    android:textAlignment="center"
+                    android:textColor="@color/text_color"
+                    android:textSize="24dp"
+                    android:textStyle="bold" />
+            </android.support.design.widget.TextInputLayout>
+
+        </RelativeLayout>
+
+    </LinearLayout>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/header"
+        android:layout_margin="5dp"
+        android:background="@drawable/border_rounded">
+
+        <android.support.design.widget.TextInputLayout
+            android:id="@+id/tilDeviceId"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="20dp"
+            android:layout_marginTop="10dp"
+            android:textColorHint="@color/text_color"
+            app:hintAnimationEnabled="true"
+            app:hintEnabled="true">
+
+            <android.support.design.widget.TextInputEditText
+                android:id="@+id/txtDeviceId"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:hint="DeviceId"
+                android:inputType="number"
+                android:maxLength="3"
+                android:minWidth="80dp"
+                android:text="123" />
+
+        </android.support.design.widget.TextInputLayout>
+
+        <android.support.design.widget.TextInputLayout
+            android:id="@+id/tilDeviceName"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="20dp"
+            android:layout_marginTop="10dp"
+            android:layout_toRightOf="@id/tilDeviceId"
+            android:textColorHint="@color/text_color"
+            app:hintEnabled="true">
+
+            <android.support.design.widget.TextInputEditText
+                android:id="@+id/txtDeviceName"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:hint="DeviceName"
+                android:inputType="text"
+                android:maxLength="20"
+                android:minWidth="220dp"
+                android:text="12345678901234567890" />
+
+        </android.support.design.widget.TextInputLayout>
+
+        <android.support.design.widget.TextInputLayout
+            android:id="@+id/tilDevicePortTimeout"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="20dp"
+            android:layout_marginTop="10dp"
+            android:layout_toRightOf="@id/tilDeviceName"
+            android:textColorHint="@color/text_color"
+            app:hintEnabled="true">
+
+            <android.support.design.widget.TextInputEditText
+                android:id="@+id/txtDevicePortTimeout"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:hint="Port turn off [ms]"
+                android:inputType="number"
+                android:minWidth="150dp"
+                android:text="666"
+                android:textColor="@color/text_color" />
+
+        </android.support.design.widget.TextInputLayout>
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="10dp"
+            android:layout_toRightOf="@+id/tilDevicePortTimeout"
+            android:text="Transmit" />
+
+        <!--
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Port turn off [ms]"
+            android:textColor="@color/text_color"
+            android:labelFor="@id/txtDevicePortTimeout"
+            android:id="@+id/lblDevicePortTimeout"
+            android:layout_marginLeft="20dp"
+            android:layout_marginTop="10dp"
+            android:layout_toRightOf="@id/lblDevicePorts"
+            />
+
+        <EditText
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="750"
+            android:layout_below="@+id/lblDevicePortTimeout"
+            android:layout_toRightOf="@id/lblDevicePorts"
+            android:textColor="@color/text_color"
+            android:layout_alignLeft="@id/lblDevicePortTimeout"
+            android:layout_alignRight="@id/lblDevicePortTimeout"
+            android:layout_marginBottom="10dp"
+            android:layout_marginTop="5dp"
+            android:textSize="18dp"
+            android:id="@+id/txtDevicePortTimeout"
+            android:gravity="center"/>
+-->
+    </RelativeLayout>
+</RelativeLayout>

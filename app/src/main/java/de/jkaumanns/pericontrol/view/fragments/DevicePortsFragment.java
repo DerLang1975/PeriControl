@@ -10,7 +10,11 @@ import android.widget.RadioButton;
 import android.widget.TextView;
 
 import de.jkaumanns.pericontrol.R;
+import de.jkaumanns.pericontrol.io.GatewayFactory;
+import de.jkaumanns.pericontrol.io.IGateway;
 import de.jkaumanns.pericontrol.model.Device;
+import de.jkaumanns.pericontrol.tasks.DeviceModeAsyncTask;
+import de.jkaumanns.pericontrol.view.adapter.DeviceArrayAdapter;
 import de.jkaumanns.pericontrol.view.adapter.DevicePortsArrayAdapter;
 
 /**
@@ -19,33 +23,43 @@ import de.jkaumanns.pericontrol.view.adapter.DevicePortsArrayAdapter;
 public class DevicePortsFragment extends Fragment {
     private Device device;
     private ListView lstDeviceChannels;
-    private DevicePortsArrayAdapter deviceAdapter;
+    private DevicePortsArrayAdapter devicePortsAdapter;
+    private DeviceArrayAdapter deviceAdapter;
     private View view;
 
     private View.OnClickListener onRadioButtonClick = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
+            DeviceModeAsyncTask dmat;
+            IGateway gateway = GatewayFactory.getGatewayInstance(null);
             switch (v.getId()) {
                 case R.id.rbtnIdle:
-                    device.switchMode(Device.MODE_IDLE);
+                    dmat = new DeviceModeAsyncTask(deviceAdapter, gateway);
+                    dmat.execute(Device.MODE_IDLE, device.getDeviceId());
                     break;
                 case R.id.rbtnTest:
-                    device.switchMode(Device.MODE_TEST);
+                    dmat = new DeviceModeAsyncTask(deviceAdapter, gateway);
+                    dmat.execute(Device.MODE_TEST, device.getDeviceId());
                     break;
                 case R.id.rbtnArmed:
-                    device.switchMode(Device.MODE_FIRE);
+                    dmat = new DeviceModeAsyncTask(deviceAdapter, gateway);
+                    dmat.execute(Device.MODE_FIRE, device.getDeviceId());
                     break;
             }
-
         }
     };
 
-    public static DevicePortsFragment newInstance(Device device) {
+    public static DevicePortsFragment newInstance(Device device, DeviceArrayAdapter deviceAdapter) {
         DevicePortsFragment fragment = new DevicePortsFragment();
         Bundle args = new Bundle();
         args.putSerializable("device", device);
+        fragment.setAdapter(deviceAdapter);
         fragment.setArguments(args);
         return fragment;
+    }
+
+    public void setAdapter(DeviceArrayAdapter deviceAdapter) {
+        this.deviceAdapter = deviceAdapter;
     }
 
     @Override
@@ -69,9 +83,9 @@ public class DevicePortsFragment extends Fragment {
         rbtn = (RadioButton) view.findViewById(R.id.rbtnArmed);
         rbtn.setOnClickListener(onRadioButtonClick);
 
-        deviceAdapter = new DevicePortsArrayAdapter(this.getContext(), device);
+        devicePortsAdapter = new DevicePortsArrayAdapter(this.getContext(), device);
         lstDeviceChannels = (ListView) view.findViewById(R.id.lstViewDeviceChannels);
-        lstDeviceChannels.setAdapter(deviceAdapter);
+        lstDeviceChannels.setAdapter(devicePortsAdapter);
 
         return view;
     }

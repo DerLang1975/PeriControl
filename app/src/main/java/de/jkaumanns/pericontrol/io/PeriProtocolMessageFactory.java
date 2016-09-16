@@ -22,6 +22,10 @@ public class PeriProtocolMessageFactory {
     public static final byte COMMAND_GET_DEVICE_GENERAL9 = (byte) 0x1D;
     public static final byte COMMAND_GET_DEVICE_GENERALA = (byte) 0x1F;
 
+    public static final byte COMMAND_SET_MODE = (byte) 0x31;
+
+    public static final byte COMMAND_MEASURE_PORT = (byte) 0x52;
+
     public static final byte COMMAND_FIRE_CHANNEL = (byte) 0x62;
 
     public static IPeriProtocolMessage createDiscoverDevicesMessage() {
@@ -57,6 +61,22 @@ public class PeriProtocolMessageFactory {
         msg.setCommand(COMMAND_FIRE_CHANNEL);
         msg.setDeviceId(deviceId);
         msg.addParameter(portNo);
+        return msg;
+    }
+
+    public static IPeriProtocolMessage createMeasurePort(byte deviceId, byte portNo) {
+        IPeriProtocolMeasurePortMessage msg = new PeriProtocolMeasurePortMessage();
+        msg.setCommand(COMMAND_MEASURE_PORT);
+        msg.setDeviceId(deviceId);
+        msg.addParameter(portNo);
+        return msg;
+    }
+
+    public static IPeriProtocolMessage createChangeModeMessage(byte deviceId, byte newMode) {
+        IPeriProtocolChangeModeMessage msg = new PeriProtocolChangeModeMessage();
+        msg.setCommand(COMMAND_SET_MODE);
+        msg.setDeviceId(deviceId);
+        msg.addParameter(newMode);
         return msg;
     }
 }

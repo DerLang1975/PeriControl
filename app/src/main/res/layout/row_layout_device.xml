@@ -22,22 +22,65 @@
         android:layout_height="wrap_content"
         android:orientation="vertical">
 
-        <TextView
+        <RelativeLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="5dp"
+            android:orientation="horizontal">
+
+            <TextView
             android:id="@+id/txtDeviceName"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_margin="5dp"
             android:text="6"
             android:textColor="@color/text_color" />
 
         <TextView
-            android:id="@+id/txtDeviceChannelCount"
+            android:id="@+id/txtDeviceUid"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_margin="5dp"
-            android:text="6"
-            android:textColor="@color/text_color" />
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:text="AAA"
+            android:textColor="@color/text_color"
+            android:textSize="10sp" />
+        </RelativeLayout>
 
+        <RelativeLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/txtDeviceChannelCount"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="6"
+                android:textColor="@color/text_color" />
+
+            <TextView
+                android:id="@+id/txtRssiValue"
+                android:layout_width="35dp"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_marginRight="5dp"
+                android:layout_toLeftOf="@+id/prgRssi"
+                android:text="-121"
+                android:textAlignment="textEnd"
+                android:textColor="@color/text_color"
+                android:textSize="12dp" />
+
+            <ProgressBar
+                android:id="@+id/prgRssi"
+                style="@android:style/Widget.Material.ProgressBar.Horizontal"
+                android:layout_width="40dp"
+                android:layout_height="20dp"
+                android:layout_alignParentRight="true"
+                android:max="120"
+                android:progress="0"
+                android:progressTint="#0000FF"
+                android:progressTintMode="src_over" />
+        </RelativeLayout>
     </LinearLayout>
 
 </LinearLayout>
