@@ -6,10 +6,14 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 
 import de.jkaumanns.pericontrol.R;
 import de.jkaumanns.pericontrol.model.Device;
 import de.jkaumanns.pericontrol.view.adapter.DeviceArrayAdapter;
+import de.jkaumanns.pericontrol.view.validation.DeviceIdValidator;
+import de.jkaumanns.pericontrol.view.validation.DeviceNameValidator;
+import de.jkaumanns.pericontrol.view.validation.DevicePortTimeoutValidator;
 
 /**
  * Created by Joerg on 01.09.2016.
@@ -19,6 +23,12 @@ public class DeviceAdminDetailFragment extends Fragment {
     private Device device;
     private DeviceArrayAdapter deviceAdapter;
     private View view;
+    private View.OnClickListener onClicked = new View.OnClickListener() {
+        @Override
+        public void onClick(View v) {
+
+        }
+    };
 
     public static DeviceAdminDetailFragment newInstance(Device device, DeviceArrayAdapter deviceAdapter) {
         DeviceAdminDetailFragment fragment = new DeviceAdminDetailFragment();
@@ -51,11 +61,16 @@ public class DeviceAdminDetailFragment extends Fragment {
 
         TextInputEditText txtDeviceId = (TextInputEditText) view.findViewById(R.id.txtDeviceId);
         txtDeviceId.setText(String.valueOf(device.getDeviceId()));
+        txtDeviceId.addTextChangedListener(new DeviceIdValidator(txtDeviceId));
         TextInputEditText txtDeviceName = (TextInputEditText) view.findViewById(R.id.txtDeviceName);
         txtDeviceName.setText(device.getDeviceName());
+        txtDeviceName.addTextChangedListener(new DeviceNameValidator(txtDeviceName));
         TextInputEditText txtDevicePortTimeout = (TextInputEditText) view.findViewById(R.id.txtDevicePortTimeout);
         txtDevicePortTimeout.setText(String.valueOf(device.getPortTimeout()));
+        txtDevicePortTimeout.addTextChangedListener(new DevicePortTimeoutValidator(txtDevicePortTimeout));
 
+        Button btnTtransmit = (Button) view.findViewById(R.id.btnTransmit);
+        btnTtransmit.setOnClickListener(onClicked);
         return view;
     }
 }

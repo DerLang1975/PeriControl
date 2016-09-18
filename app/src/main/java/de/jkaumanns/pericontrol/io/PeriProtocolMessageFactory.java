@@ -1,5 +1,7 @@
 package de.jkaumanns.pericontrol.io;
 
+import de.jkaumanns.pericontrol.model.Device;
+
 /**
  * Created by Joerg on 01.09.2016.
  */
@@ -13,7 +15,7 @@ public class PeriProtocolMessageFactory {
     public static final byte COMMAND_GET_DEVICE_PORT_TIMEOUT = (byte) 0x0B;
     public static final byte COMMAND_GET_DEVICE_GENERAL1 = (byte) 0x0D;
     public static final byte COMMAND_GET_DEVICE_GENERAL2 = (byte) 0x0F;
-    public static final byte COMMAND_GET_DEVICE_GENERAL3 = (byte) 0x11;
+    public static final byte COMMAND_SET_DEVICE_INFORMATION = (byte) 0x11;
     public static final byte COMMAND_GET_DEVICE_GENERAL4 = (byte) 0x13;
     public static final byte COMMAND_GET_DEVICE_GENERAL5 = (byte) 0x15;
     public static final byte COMMAND_GET_DEVICE_GENERAL6 = (byte) 0x17;
@@ -77,6 +79,19 @@ public class PeriProtocolMessageFactory {
         msg.setCommand(COMMAND_SET_MODE);
         msg.setDeviceId(deviceId);
         msg.addParameter(newMode);
+        return msg;
+    }
+
+    public static IPeriProtocolMessage createSetDeviceInformationMessage(Device device) {
+        IPeriProtocolSetDeviceInformationMessage msg = new PeriProtocolSetDeviceInformationMessage();
+        msg.setCommand(COMMAND_SET_DEVICE_INFORMATION);
+        msg.setDeviceId(device.getDeviceId());
+        msg.addParameter(device.getDeviceId());
+        msg.addParameter((byte) (device.getPortTimeout() >> 8) & 0xFF);
+        msg.addParameter((byte) (device.getPortTimeout() & 0xFF));
+        int i = 0;
+        for (; i < device.getName().length(); i++) msg.addParameter(device.getName().charAt(i));
+        for (; i < 20; i++) msg.addParameter((byte) ' ');
         return msg;
     }
 }

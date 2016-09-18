@@ -164,40 +164,15 @@
         </android.support.design.widget.TextInputLayout>
 
         <Button
+            android:id="@+id/btnTransmit"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
             android:layout_marginLeft="10dp"
             android:layout_toRightOf="@+id/tilDevicePortTimeout"
-            android:text="Transmit" />
-
-        <!--
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Port turn off [ms]"
-            android:textColor="@color/text_color"
-            android:labelFor="@id/txtDevicePortTimeout"
-            android:id="@+id/lblDevicePortTimeout"
-            android:layout_marginLeft="20dp"
-            android:layout_marginTop="10dp"
-            android:layout_toRightOf="@id/lblDevicePorts"
+            android:text="Transmit"
             />
 
-        <EditText
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="750"
-            android:layout_below="@+id/lblDevicePortTimeout"
-            android:layout_toRightOf="@id/lblDevicePorts"
-            android:textColor="@color/text_color"
-            android:layout_alignLeft="@id/lblDevicePortTimeout"
-            android:layout_alignRight="@id/lblDevicePortTimeout"
-            android:layout_marginBottom="10dp"
-            android:layout_marginTop="5dp"
-            android:textSize="18dp"
-            android:id="@+id/txtDevicePortTimeout"
-            android:gravity="center"/>
--->
+
     </RelativeLayout>
 </RelativeLayout>
